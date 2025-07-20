@@ -4,6 +4,8 @@ import { useEffect } from "react";
 
 import AOS from "aos";
 import "aos/dist/aos.css";
+import { Analytics } from "@vercel/analytics/next";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 
 import dynamic from 'next/dynamic';
 import Footer from "@/components/ui/footer";
@@ -28,6 +30,8 @@ export default function DefaultLayout({
       <VideoPreloader />
       <main className="relative flex grow flex-col">{children}</main>
       <Footer />
+      <Analytics />
+      <SpeedInsights />
     </>
   );
 }
