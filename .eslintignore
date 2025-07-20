@@ -1,0 +1,12 @@
+**/*.ts
+**/*.tsx
+**/*.js
+**/*.jsx
+**/*.mjs
+**/*.cjs
+.next/
+node_modules/
+build/
+dist/
+coverage/
+*.d.ts

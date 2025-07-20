@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<svg width="760" height="668" xmlns="http://www.w3.org/2000/svg" xmlns:svg="http://www.w3.org/2000/svg">
+ <defs>
+  <filter color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse" height="666.84" id="a" width="758.84" x="0.58" y="0.58">
+   <feFlood flood-opacity="0" result="BackgroundImageFix"/>
+   <feBlend in="SourceGraphic" in2="BackgroundImageFix"/>
+   <feGaussianBlur result="effect1_foregroundBlur_2109_4735" stdDeviation="46.21"/>
+  </filter>
+ </defs>
+ <g class="layer">
+  <title>Layer 1</title>
+  <g filter="url(#a)" id="svg_1">
+   <path d="m93,93l574,386.9l-326.18,95.1l-247.82,-482z" fill="#7f00ff" fill-opacity="0.7" id="svg_2"/>
+  </g>
+ </g>
+</svg>
