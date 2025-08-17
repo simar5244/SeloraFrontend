@@ -108,6 +108,22 @@ const ProjectManagementModal = ({ isOpen, onClose }: { isOpen: boolean, onClose:
   />
 );
 
+const ObjectiveMappingModal = ({ isOpen, onClose }: { isOpen: boolean, onClose: () => void }) => (
+  <AnimatedModal
+    isOpen={isOpen}
+    onClose={onClose}
+    videoSrc="/optimized/goals.webm"
+    title="Objective Mapping"
+    description="Turn strategy into outcomes: trace every objective to the initiatives, projects, and people that move the needle—spot direct and indirect impact, frontline owners, and silent heroes, down to KPI timelines."
+    features={[
+      "Map company objectives to initiatives, projects, and tasks (OKR alignment)",
+      "Identify direct vs. indirect contribution paths across the org",
+      "Spot 'frontline' impact owners and unsung 'silent heroes'",
+      "Drill down from company KPIs to individual contributions and timelines"
+    ]}
+  />
+);
+
 export default function Features() {
   const [isProjectModalOpen, setIsProjectModalOpen] = useState(false);
   const [isReportModalOpen, setIsReportModalOpen] = useState(false);
@@ -115,6 +131,7 @@ export default function Features() {
   const [isOrgAIModalOpen, setIsOrgAIModalOpen] = useState(false);
   const [isPerfEvalModalOpen, setIsPerfEvalModalOpen] = useState(false);
   const [isERPModalOpen, setIsERPModalOpen] = useState(false);
+  const [isObjectiveModalOpen, setIsObjectiveModalOpen] = useState(false);
   return (
     <section className="relative">
       <div
@@ -327,21 +344,34 @@ export default function Features() {
                 </p>
               </article>
             </PreloadTrigger>
-            <article>
-              <svg
-                className="mb-3 fill-violet-500"
-                xmlns="http://www.w3.org/2000/svg"
-                width={24}
-                height={24}
-              >
-                
-              </svg>
-              
-            </article>
-            <article>
-              
-                
-            </article>
+            <PreloadTrigger
+              videoSrc="/optimized/goals.webm"
+              onClick={() => setIsObjectiveModalOpen(true)}
+              className="relative"
+            >
+              <article className="group cursor-pointer">
+                <svg
+                  className="mb-3 fill-violet-500"
+                  xmlns="http://www.w3.org/2000/svg"
+                  width={24}
+                  height={24}
+                  viewBox="0 0 24 24"
+                >
+                  <path d="M12 2a10 10 0 1 0 10 10h-2A8 8 0 1 1 12 4V2Z" />
+                  <path fillOpacity="0.48" d="M12 6a6 6 0 1 0 6 6h-2a4 4 0 1 1-4-4V6Z"/>
+                  <path d="M12 10a2 2 0 1 0 2 2h6v-2h-6a2 2 0 0 0-2-2Z" />
+                </svg>
+                <h3 className="relative inline-block mb-1 font-nacelle text-[1rem] font-semibold text-gray-200">
+                  <span className="relative">
+                    <span className="absolute bottom-0 left-0 h-0.5 w-full bg-violet-500 transform origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-300"></span>
+                    Objective Mapping
+                  </span>
+                </h3>
+                <p className="text-violet-200/65 group-hover:text-violet-200 transition-colors duration-300">
+                  See strategy-to-execution in one view. Know what projects drive each objective, who’s on the front lines, and who the silent heroes are—down to KPIs and timelines.
+                </p>
+              </article>
+            </PreloadTrigger>
           </div>
         </div>
       </div>
@@ -370,6 +400,10 @@ export default function Features() {
       <ERPIntegrationsModal
         isOpen={isERPModalOpen}
         onClose={() => setIsERPModalOpen(false)}
+      />
+      <ObjectiveMappingModal 
+        isOpen={isObjectiveModalOpen} 
+        onClose={() => setIsObjectiveModalOpen(false)} 
       />
     </section>
   );
