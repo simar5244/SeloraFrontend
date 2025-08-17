@@ -150,7 +150,7 @@ function Pricing() {
                   <p className="text-violet-200/65 mb-6">Perfect for small teams</p>
                   <div className="mb-6">
                     <span className="text-4xl font-nacelle text-white">
-                      ${isAnnual ? '1,999' : '199'}
+                      ${isAnnual ? '5,999' : '599'}
                       <span className="text-lg text-gray-400"> / {isAnnual ? 'year' : 'month'}</span>
                     </span>
                   </div>
@@ -205,7 +205,7 @@ function Pricing() {
                   <p className="text-violet-200/65 mb-6">Ideal for growing businesses</p>
                   <div className="mb-6">
                     <span className="text-4xl font-nacelle text-white">
-                      ${isAnnual ? '4,999' : '499'}
+                      ${isAnnual ? '9,999' : '999'}
                       <span className="text-lg text-gray-400"> / {isAnnual ? 'year' : 'month'}</span>
                     </span>
                   </div>
@@ -266,7 +266,7 @@ function Pricing() {
                   <p className="text-violet-200/65 mb-6">Perfect for large organizations</p>
                   <div className="mb-6">
                     <span className="text-4xl font-nacelle text-white">
-                      ${isAnnual ? '9,999' : '999'}
+                      ${isAnnual ? '29,999' : '2,999'}
                       <span className="text-lg text-gray-400"> / {isAnnual ? 'year' : 'month'}</span>
                     </span>
                   </div>

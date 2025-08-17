@@ -45,15 +45,18 @@ const GalaxyVisualizationModal = ({ isOpen, onClose }: { isOpen: boolean, onClos
   <AnimatedModal
     isOpen={isOpen}
     onClose={onClose}
-    videoSrc="/optimized/gif3.webm"
-    title="3D Galaxy Visualization"
-    description="Explore your organization like never before with our immersive 3D galaxy view. Visualize complex relationships between teams, projects, and employees in an interactive 3D space."
+    videoSrc="/optimized/goals.webm"
+    title="Objective Mapping — Strategy Graph"
+    description="From strategy to execution in a single, living graph. See how every initiative, project, and task advances a strategic objective—who leads, who enables, and what truly moves the needle—complete with KPIs, timelines, budgets, tools, and effort."
     features={[
-      "Interactive 3D visualization of your entire organization",
-      "View team structures, project relationships, and employee connections",
-      "Zoom, pan, and rotate for different perspectives",
-      "Click on any node for detailed information and insights"
+      "Map objectives to initiatives, projects, and tasks with full OKR alignment",
+      "Distinguish direct vs. indirect contributors (people and projects) with clear impact paths",
+      "Attribute budgets, responsibilities, tools used, and time commitments at every node",
+      "Drill down from company KPIs to individual owners, dependencies, risks, and timelines",
+      "Sort and filter by priority, criticality, ROI, capacity, and due dates",
+      "Search across objectives, people, projects, KPIs, budgets, and tooling"
     ]}
+    
   />
 );
 
@@ -196,7 +199,7 @@ export default function OrganizationFeatures() {
             </PreloadTrigger>
             {/* Card 3 */}
             <PreloadTrigger
-              videoSrc="/optimized/gif3.webm"
+              videoSrc="/optimized/goals.webm"
               onClick={() => setIsGalaxyModalOpen(true)}
               className="relative"
             >
@@ -237,12 +240,12 @@ export default function OrganizationFeatures() {
                   <div className="mb-3">
                     <span className="btn-sm relative rounded-full bg-gray-800/40 px-2.5 py-0.5 text-xs font-normal before:pointer-events-none before:absolute before:inset-0 before:rounded-[inherit] before:border before:border-transparent before:[background:linear-gradient(to_bottom,--theme(--color-gray-700/.15),--theme(--color-gray-700/.5))_border-box] before:[mask-composite:exclude_!important] before:[mask:linear-gradient(white_0_0)_padding-box,_linear-gradient(white_0_0)] hover:bg-gray-800/60">
                       <span className="bg-linear-to-r from-violet-500 to-violet-200 bg-clip-text text-transparent">
-                        Talent Galaxy
+                        Objective Mapping
                       </span>
                     </span>
                   </div>
                   <p className="text-violet-200/65">
-Navigate your organization in 3D. Track skills, reporting lines, and cross-functional ties to uncover hidden talent and structural insights.
+                  A living strategy graph: trace objectives to the work and people that power them. See direct and indirect contributions, owners and enablers, KPIs, budgets, & timelines.
                   </p>
                 </div>
               </div>

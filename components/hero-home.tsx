@@ -97,13 +97,13 @@ export default function HeroHome() {
                 Selora lets you design a healthier, smarter organization before making a single move.
               </motion.p>
               <motion.div 
-                className="mx-auto max-w-xs sm:flex sm:max-w-none sm:justify-center"
+                className="mx-auto max-w-xs sm:flex sm:max-w-none sm:justify-center sm:gap-3"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.6, duration: 0.8 }}
               >
                 <Link
-                  className="btn group mb-4 w-full bg-gradient-to-t from-violet-600 to-violet-500 bg-[length:100%_100%] text-white shadow-[inset_0px_1px_0px_0px_rgba(255,255,255,0.16)] hover:bg-[length:100%_150%] sm:mb-0 sm:w-auto"
+                  className="btn group mb-3 w-full bg-gradient-to-t from-violet-600 to-violet-500 bg-[length:100%_100%] text-white shadow-[inset_0px_1px_0px_0px_rgba(255,255,255,0.16)] hover:bg-[length:100%_150%] sm:mb-0 sm:w-auto"
                   href="https://app.seloraa.com/company-signup"
                   target="_blank"
                   rel="noopener noreferrer"
@@ -113,6 +113,14 @@ export default function HeroHome() {
                     <span className="ml-1 tracking-normal text-white/50 transition-transform group-hover:translate-x-0.5">
                       -&gt;
                     </span>
+                  </span>
+                </Link>
+                <Link
+                  className="btn group w-full sm:w-auto bg-white/10 text-white ring-1 ring-white/15 hover:bg-white/15"
+                  href="/demo"
+                >
+                  <span className="relative inline-flex items-center">
+                    Schedule a demo
                   </span>
                 </Link>
               </motion.div>

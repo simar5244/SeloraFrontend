@@ -1,8 +1,8 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
-import { motion, useAnimation } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
 import BlurredShapeGray from "@/public/images/blurred-shape-gray.svg";
 import BlurredShape from "@/public/images/blurred-shape.svg";
@@ -11,6 +11,7 @@ import PageIllustration from '@/components/page-illustration';
 import OptimizedVideo from '@/components/optimized-video';
 import AnimatedModal from '@/components/animated-modal';
 import PreloadTrigger from '@/components/preload-trigger';
+import Spotlight from '@/components/spotlight';
 
 const ERPIntegrationsModal = ({ isOpen, onClose }: { isOpen: boolean, onClose: () => void }) => (
   <AnimatedModal
@@ -112,17 +113,129 @@ const ObjectiveMappingModal = ({ isOpen, onClose }: { isOpen: boolean, onClose: 
   <AnimatedModal
     isOpen={isOpen}
     onClose={onClose}
-    videoSrc="/optimized/goals.webm"
-    title="Objective Mapping"
-    description="Turn strategy into outcomes: trace every objective to the initiatives, projects, and people that move the needle—spot direct and indirect impact, frontline owners, and silent heroes, down to KPI timelines."
+    videoSrc="/optimized/gif3.webm"
+    title="3D Mapping"
+    description="Navigate your organization in 3D. Track skills, reporting lines, and cross-functional ties to uncover hidden talent and structural insights."
     features={[
-      "Map company objectives to initiatives, projects, and tasks (OKR alignment)",
-      "Identify direct vs. indirect contribution paths across the org",
-      "Spot 'frontline' impact owners and unsung 'silent heroes'",
-      "Drill down from company KPIs to individual contributions and timelines"
+      "Interactive 3D visualization of your entire organization",
+      "View team structures, project relationships, and employee connections",
+      "Zoom, pan, and rotate for different perspectives",
+      "Click on any node for detailed information and insights"
     ]}
   />
 );
+
+// Refined static SVG icons (external UI only)
+const ProjectBarsIcon = () => (
+  <svg className="h-16 w-16" viewBox="0 0 64 64" fill="none">
+    <defs>
+      <linearGradient id="g1" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0%" stopColor="#a78bfa" />
+        <stop offset="100%" stopColor="#6366f1" />
+      </linearGradient>
+    </defs>
+    <rect x="8" y="36" width="10" height="20" rx="3" fill="url(#g1)" />
+    <rect x="24" y="28" width="10" height="28" rx="3" fill="url(#g1)" opacity=".9" />
+    <rect x="40" y="18" width="10" height="38" rx="3" fill="url(#g1)" opacity=".8" />
+  </svg>
+);
+
+const ReportPieIcon = () => (
+  <svg className="h-16 w-16" viewBox="0 0 64 64" fill="none">
+    <circle cx="32" cy="32" r="18" stroke="#a78bfa" strokeWidth="3" opacity=".35" />
+    <path d="M32 14a18 18 0 0 1 18 18H32V14z" fill="#a78bfa" />
+    <circle cx="32" cy="32" r="6" fill="#6366f1" />
+  </svg>
+);
+
+const UserAvatarIcon = () => (
+  <svg className="h-16 w-16" viewBox="0 0 64 64" fill="none">
+    <circle cx="22" cy="22" r="8" stroke="#a78bfa" strokeWidth="3" />
+    <circle cx="42" cy="22" r="8" stroke="#6366f1" strokeWidth="3" />
+    <rect x="14" y="36" width="36" height="14" rx="7" stroke="#a78bfa" strokeWidth="3" />
+  </svg>
+);
+
+const OrgNodesIcon = () => (
+  <svg className="h-16 w-16" viewBox="0 0 64 64" fill="none">
+    <circle cx="32" cy="32" r="4" fill="#a78bfa" />
+    <circle cx="14" cy="18" r="3" fill="#6366f1" />
+    <circle cx="50" cy="18" r="3" fill="#6366f1" />
+    <circle cx="14" cy="46" r="3" fill="#6366f1" />
+    <circle cx="50" cy="46" r="3" fill="#6366f1" />
+    <line x1="32" y1="32" x2="14" y2="18" stroke="#a78bfa" strokeOpacity=".4" />
+    <line x1="32" y1="32" x2="50" y2="18" stroke="#a78bfa" strokeOpacity=".35" />
+    <line x1="32" y1="32" x2="14" y2="46" stroke="#a78bfa" strokeOpacity=".35" />
+    <line x1="32" y1="32" x2="50" y2="46" stroke="#a78bfa" strokeOpacity=".35" />
+  </svg>
+);
+
+const StarPulseIcon = () => (
+  <svg className="h-16 w-16" viewBox="0 0 64 64" fill="none">
+    <path d="M32 8l6.5 13.2L53 23l-9.5 9.3L46 48l-14-7.5L18 48l2.5-15.7L11 23l14.5-1.8L32 8z" fill="#a78bfa" opacity=".9" />
+  </svg>
+);
+
+const RingsIcon = () => (
+  <svg className="h-16 w-16" viewBox="0 0 64 64" fill="none">
+    <circle cx="32" cy="32" r="18" stroke="#a78bfa" strokeWidth="3" opacity=".35" />
+    <circle cx="32" cy="32" r="12" stroke="#6366f1" strokeWidth="3" strokeDasharray="8 8" />
+    <circle cx="32" cy="32" r="6" fill="#a78bfa" />
+  </svg>
+);
+
+// Small 20x20 futuristic glyphs (one per card)
+const BarsGlyph = () => (
+  <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <rect x="3" y="12" width="3" height="6" rx="1.2" fill="#8b5cf6" />
+    <rect x="8.5" y="9" width="3" height="9" rx="1.2" fill="#a78bfa" />
+    <rect x="14" y="6" width="3" height="12" rx="1.2" fill="#6366f1" />
+  </svg>
+);
+const PieGlyph = () => (
+  <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="10" cy="10" r="6" stroke="#a78bfa" strokeWidth="2" opacity="0.6" />
+    <path d="M10 4a6 6 0 0 1 6 6h-6V4z" fill="#8b5cf6" />
+  </svg>
+);
+const UsersGlyph = () => (
+  <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="7" cy="8" r="3" stroke="#a78bfa" strokeWidth="1.5" />
+    <circle cx="13.5" cy="8" r="2.5" stroke="#6366f1" strokeWidth="1.5" />
+    <rect x="3.5" y="12" width="9" height="5" rx="2.5" stroke="#a78bfa" strokeWidth="1.5" />
+  </svg>
+);
+const NodesGlyph = () => (
+  <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="10" cy="10" r="2" fill="#a78bfa" />
+    <circle cx="4" cy="6" r="1.5" fill="#6366f1" />
+    <circle cx="16" cy="6" r="1.5" fill="#6366f1" />
+    <circle cx="4" cy="14" r="1.5" fill="#6366f1" />
+    <circle cx="16" cy="14" r="1.5" fill="#6366f1" />
+    <path d="M10 10L4 6M10 10l6-4M10 10l-6 4M10 10l6 4" stroke="#a78bfa" opacity="0.5" />
+  </svg>
+);
+const RingsGlyph = () => (
+  <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="10" cy="10" r="6" stroke="#a78bfa" strokeWidth="1.5" opacity="0.45" />
+    <circle cx="10" cy="10" r="4" stroke="#6366f1" strokeWidth="1.5" strokeDasharray="3 3" />
+  </svg>
+);
+const StarGlyph = () => (
+  <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M10 3l2.2 4.5 5 .6-3.7 3.5 1 4.9L10 14.8 5.5 16.5l1-4.9L2.8 8.1l5-.6L10 3z" fill="#a78bfa" />
+  </svg>
+);
+
+// Unique glyph for 3D Mapping
+const CubeGlyph = () => (
+  <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M10 2l7 4v8l-7 4-7-4V6l7-4z" stroke="#8b5cf6" strokeWidth="1.5" fill="none" />
+    <path d="M3 6l7 4 7-4" stroke="#a78bfa" strokeWidth="1.5" />
+    <path d="M10 18V10" stroke="#6366f1" strokeWidth="1.5" />
+  </svg>
+);
+
 
 export default function Features() {
   const [isProjectModalOpen, setIsProjectModalOpen] = useState(false);
@@ -132,6 +245,31 @@ export default function Features() {
   const [isPerfEvalModalOpen, setIsPerfEvalModalOpen] = useState(false);
   const [isERPModalOpen, setIsERPModalOpen] = useState(false);
   const [isObjectiveModalOpen, setIsObjectiveModalOpen] = useState(false);
+  const scrollerRef = useRef<HTMLDivElement>(null);
+  const firstCardRef = useRef<HTMLDivElement>(null);
+
+  // Center the first card on initial load
+  useEffect(() => {
+    const scroller = scrollerRef.current;
+    const first = firstCardRef.current;
+    if (!scroller || !first) return;
+    // Only center on desktop (md and up)
+    if (typeof window !== 'undefined' && !window.matchMedia('(min-width: 768px)').matches) {
+      return;
+    }
+    // Wait for layout
+    requestAnimationFrame(() => {
+      const target = first.offsetLeft - (scroller.clientWidth - first.clientWidth) / 2;
+      scroller.scrollTo({ left: Math.max(0, target), behavior: 'auto' });
+    });
+  }, []);
+  const scrollRow = (dir: number) => {
+    const el = scrollerRef.current;
+    if (!el) return;
+    const amount = Math.floor(el.clientWidth * 0.85);
+    el.scrollBy({ left: dir * amount, behavior: 'smooth' });
+  };
+
   return (
     <section className="relative">
       <div
@@ -176,202 +314,201 @@ export default function Features() {
               and employee satisfaction.
             </p>
           </div>
-          <div className="flex justify-center pb-4 md:pb-12" data-aos="fade-up">
+          <div className="flex justify-center pb-3 md:pb-8" data-aos="fade-up">
             <FeaturesIllustration />
           </div>
-          {/* Items */}
-          <div className="mx-auto grid max-w-sm gap-12 sm:max-w-none sm:grid-cols-2 md:gap-x-14 md:gap-y-16 lg:grid-cols-3">
-            <PreloadTrigger
-              videoSrc="/optimized/gifprojects.webm"
-              onClick={() => setIsProjectModalOpen(true)}
-              className="relative"
-            >
-              <article className="group cursor-pointer">
-                <svg
-                  className="mb-3 fill-violet-500"
-                  xmlns="http://www.w3.org/2000/svg"
-                  width={24}
-                  height={24}
-                  viewBox="0 0 24 24"
-                >
-                  <path d="M0 0h14v17H0V0Zm2 2v13h10V2H2Z" />
-                  <path
-                    fillOpacity="0.48"
-                    d="m16.295 5.393 7.528 2.034-4.436 16.412L5.87 20.185l.522-1.93 11.585 3.132 3.392-12.55-5.597-1.514.522-1.93Z"
-                  />
-                </svg>
-                <h3 className="relative inline-block mb-1 font-nacelle text-[1rem] font-semibold text-gray-200">
-                  <span className="relative">
-                    <span className="absolute bottom-0 left-0 h-0.5 w-full bg-violet-500 transform origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-300"></span>
-                    Project Management
-                  </span>
-                </h3>
-                <p className="text-violet-200/65 group-hover:text-violet-200 transition-colors duration-300">
-                  Manage all projects under one roof. Edit employee access permissions, filter projects, and track status updates. Find the right people for each project using AI.
-                </p>
-              </article>
+          {/* Items: single horizontal row with bottom arrows, wrapped in Spotlight for purple hover */}
+          <Spotlight className="group mx-auto max-w-6xl">
+          <div ref={scrollerRef} className="overflow-x-auto scrollbar-none [-ms-overflow-style:none] [scrollbar-width:none] mx-auto">
+            <div className="flex flex-nowrap gap-4 pr-12 md:pl-[calc((100%_-_352px)/2)] md:pr-[calc((100%_-_352px)/2_+_6rem)]">
+            <PreloadTrigger videoSrc="/optimized/gifprojects.webm" onClick={() => setIsProjectModalOpen(true)} className="relative">
+              <motion.article ref={firstCardRef} className="group/card relative overflow-hidden rounded-2xl bg-gray-800 p-px before:pointer-events-none before:absolute before:-left-40 before:-top-40 before:z-10 before:h-80 before:w-80 before:translate-x-[var(--mouse-x)] before:translate-y-[var(--mouse-y)] before:rounded-full before:bg-violet-500/80 before:opacity-0 before:blur-3xl before:transition-opacity before:duration-500 after:pointer-events-none after:absolute after:-left-48 after:-top-48 after:z-30 after:h-64 after:w-64 after:translate-x-[var(--mouse-x)] after:translate-y-[var(--mouse-y)] after:rounded-full after:bg-violet-500 after:opacity-0 after:blur-3xl after:transition-opacity after:duration-500 hover:after:opacity-20 group-hover:before:opacity-100 cursor-pointer w-[294px] md:w-[352px] h-[189px] md:h-[210px] shrink-0">
+                <div className="relative z-20 h-full overflow-hidden rounded-[inherit] bg-gray-950 after:absolute after:inset-0 after:bg-linear-to-br after:from-gray-900/50 after:via-gray-800/25 after:to-gray-900/50">
+                  <div className="p-5 pt-6 pb-6 flex flex-col gap-1.5">
+                  <div className="mb-2 flex items-center justify-between">
+                    <span className="btn-sm relative rounded-full bg-gray-800/40 px-2.5 py-0.5 text-xs font-normal before:pointer-events-none before:absolute before:inset-0 before:rounded-[inherit] before:border before:border-transparent before:[background:linear-gradient(to_bottom,--theme(--color-gray-700/.15),--theme(--color-gray-700/.5))_border-box] before:[mask-composite:exclude_!important] before:[mask:linear-gradient(white_0_0)_padding-box,_linear-gradient(white_0_0)] hover:bg-gray-800/60">
+                      <span className="bg-linear-to-r from-violet-500 to-violet-200 bg-clip-text text-transparent">
+                        Project Management
+                      </span>
+                    </span>
+                    <div className="shrink-0 text-violet-200/80"><BarsGlyph /></div>
+                  </div>
+                  <p className="text-xs md:text-sm text-violet-200/70 group-hover:text-violet-100/90 transition-colors">
+                  Manage all projects under one roof. Edit employee access permissions, filter projects, and track status updates. Find the right people for each project using AI.                  </p>
+                  <div className="mt-auto pb-1 flex items-center justify-end">
+                    <div className="absolute right-3 bottom-3 z-50 grid h-9 w-9 place-items-center rounded-full bg-white/5 ring-1 ring-white/10 group-hover:bg-white/10 transition">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 20 20" fill="none">
+                        <path d="M10 4v12M4 10h12" stroke="#E5E7EB" strokeWidth="2" strokeLinecap="round"/>
+                      </svg>
+                    </div>
+                  </div>
+                  </div>
+                </div>
+              </motion.article>
             </PreloadTrigger>
-            <PreloadTrigger
-              videoSrc="/optimized/gifreport.webm"
-              onClick={() => setIsReportModalOpen(true)}
-              className="relative"
-            >
-              <article className="group cursor-pointer">
-                <svg
-                  className="mb-3 fill-violet-500"
-                  xmlns="http://www.w3.org/2000/svg"
-                  width={24}
-                  height={24}
-                  viewBox="0 0 24 24"
-                >
-                  <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm1-13h-2v6h7v-2h-5V7z" />
-                </svg>
-                <h3 className="relative inline-block mb-1 font-nacelle text-[1rem] font-semibold text-gray-200">
-                  <span className="relative">
-                    <span className="absolute bottom-0 left-0 h-0.5 w-full bg-violet-500 transform origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-300"></span>
-                    Report Generation
-                  </span>
-                </h3>
-                <p className="text-violet-200/65 group-hover:text-violet-200 transition-colors duration-300">
-                  Create, schedule, and export detailed reports with custom visuals. Use AI to generate insights and track changes with version control.
-                </p>
-              </article>
+
+            <PreloadTrigger videoSrc="/optimized/giffeedback.webm" onClick={() => setIsPerfEvalModalOpen(true)} className="relative">
+              <motion.article className="group/card relative overflow-hidden rounded-2xl bg-gray-800 p-px before:pointer-events-none before:absolute before:-left-40 before:-top-40 before:z-10 before:h-80 before:w-80 before:translate-x-[var(--mouse-x)] before:translate-y-[var(--mouse-y)] before:rounded-full before:bg-violet-500/80 before:opacity-0 before:blur-3xl before:transition-opacity before:duration-500 after:pointer-events-none after:absolute after:-left-48 after:-top-48 after:z-30 after:h-64 after:w-64 after:translate-x-[var(--mouse-x)] after:translate-y-[var(--mouse-y)] after:rounded-full after:bg-violet-500 after:opacity-0 after:blur-3xl after:transition-opacity after:duration-500 hover:after:opacity-20 group-hover:before:opacity-100 cursor-pointer w-[294px] md:w-[352px] h-[189px] md:h-[210px] shrink-0">
+                <div className="relative z-20 h-full overflow-hidden rounded-[inherit] bg-gray-950 after:absolute after:inset-0 after:bg-linear-to-br after:from-gray-900/50 after:via-gray-800/25 after:to-gray-900/50">
+                  <div className="p-5 pt-6 pb-6 flex flex-col gap-1.5">
+                  <div className="mb-2 flex items-center justify-between">
+                    <span className="btn-sm relative rounded-full bg-gray-800/40 px-2.5 py-0.5 text-xs font-normal before:pointer-events-none before:absolute before:inset-0 before:rounded-[inherit] before:border before:border-transparent before:[background:linear-gradient(to_bottom,--theme(--color-gray-700/.15),--theme(--color-gray-700/.5))_border-box] before:[mask-composite:exclude_!important] before:[mask:linear-gradient(white_0_0)_padding-box,_linear-gradient(white_0_0)] hover:bg-gray-800/60">
+                      <span className="bg-linear-to-r from-violet-500 to-violet-200 bg-clip-text text-transparent">
+                        Performance Evaluation
+                      </span>
+                    </span>
+                    <div className="shrink-0 text-violet-200/80"><StarGlyph /></div>
+                  </div>
+                  <p className="text-xs md:text-sm text-violet-200/70 group-hover:text-violet-100/90 transition-colors">
+                  World's first fair, bias-adjusted, no-negative-connotations-ever feedback evaluation system using our proprietary algorithms. Focus on growth, not just ratings.                  </p>
+                  <div className="mt-auto pb-1 flex items-center justify-end">
+                    <div className="absolute right-3 bottom-3 z-50 grid h-9 w-9 place-items-center rounded-full bg-white/5 ring-1 ring-white/10 group-hover:bg-white/10 transition">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 20 20" fill="none">
+                        <path d="M10 4v12M4 10h12" stroke="#E5E7EB" strokeWidth="2" strokeLinecap="round"/>
+                      </svg>
+                    </div>
+                  </div>
+                  </div>
+                </div>
+              </motion.article>
             </PreloadTrigger>
-            <PreloadTrigger
-              videoSrc="/optimized/gifusermanagement.webm"
-              onClick={() => setIsUserModalOpen(true)}
-              className="relative"
-            >
-              <article className="group cursor-pointer">
-                <svg
-                  className="mb-3 fill-violet-500"
-                  xmlns="http://www.w3.org/2000/svg"
-                  width={24}
-                  height={24}
-                  viewBox="0 0 24 24"
-                >
-                  <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
-                </svg>
-                <h3 className="relative inline-block mb-1 font-nacelle text-[1rem] font-semibold text-gray-200">
-                  <span className="relative">
-                    <span className="absolute bottom-0 left-0 h-0.5 w-full bg-violet-500 transform origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-300"></span>
-                    User Management
-                  </span>
-                </h3>
-                <p className="text-violet-200/65 group-hover:text-violet-200 transition-colors duration-300">
-                  Manage users you let into the app. MFA and admin approval needed for access. Edit roles, delete records, and search employees with ease.
-                </p>
-              </article>
+
+            <PreloadTrigger videoSrc="/optimized/goals.webm" onClick={() => setIsObjectiveModalOpen(true)} className="relative">
+              <motion.article className="group/card relative overflow-hidden rounded-2xl bg-gray-800 p-px before:pointer-events-none before:absolute before:-left-40 before:-top-40 before:z-10 before:h-80 before:w-80 before:translate-x-[var(--mouse-x)] before:translate-y-[var(--mouse-y)] before:rounded-full before:bg-violet-500/80 before:opacity-0 before:blur-3xl before:transition-opacity before:duration-500 after:pointer-events-none after:absolute after:-left-48 after:-top-48 after:z-30 after:h-64 after:w-64 after:translate-x-[var(--mouse-x)] after:translate-y-[var(--mouse-y)] after:rounded-full after:bg-violet-500 after:opacity-0 after:blur-3xl after:transition-opacity after:duration-500 hover:after:opacity-20 group-hover:before:opacity-100 cursor-pointer w-[294px] md:w-[352px] h-[189px] md:h-[210px] shrink-0">
+                <div className="relative z-20 h-full overflow-hidden rounded-[inherit] bg-gray-950 after:absolute after:inset-0 after:bg-linear-to-br after:from-gray-900/50 after:via-gray-800/25 after:to-gray-900/50">
+                  <div className="p-5 pt-6 pb-6 flex flex-col gap-1.5">
+                  <div className="mb-2 flex items-center justify-between">
+                    <span className="btn-sm relative rounded-full bg-gray-800/40 px-2.5 py-0.5 text-xs font-normal before:pointer-events-none before:absolute before:inset-0 before:rounded-[inherit] before:border before:border-transparent before:[background:linear-gradient(to_bottom,--theme(--color-gray-700/.15),--theme(--color-gray-700/.5))_border-box] before:[mask-composite:exclude_!important] before:[mask:linear-gradient(white_0_0)_padding-box,_linear-gradient(white_0_0)] hover:bg-gray-800/60">
+                      <span className="bg-linear-to-r from-violet-500 to-violet-200 bg-clip-text text-transparent">
+                        3D Mapping
+                      </span>
+                    </span>
+                    <div className="shrink-0 text-violet-200/80"><CubeGlyph /></div>
+                  </div>
+                  <p className="text-xs md:text-sm text-violet-200/70 group-hover:text-violet-100/90 transition-colors">
+                    Navigate your org in 3D and reveal hidden structure. Track skills, reporting lines, and cross-functional ties.
+                  </p>
+                  <div className="mt-auto pb-1 flex items-center justify-end">
+                    <div className="absolute right-3 bottom-3 z-50 grid h-9 w-9 place-items-center rounded-full bg-white/5 ring-1 ring-white/10 group-hover:bg-white/10 transition">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 20 20" fill="none">
+                        <path d="M10 4v12M4 10h12" stroke="#E5E7EB" strokeWidth="2" strokeLinecap="round"/>
+                      </svg>
+                    </div>
+                  </div>
+                  </div>
+                </div>
+              </motion.article>
             </PreloadTrigger>
-            <PreloadTrigger
-              videoSrc="/optimized/GIFORGAI.webm"
-              onClick={() => setIsOrgAIModalOpen(true)}
-              className="relative"
-            >
-              <article className="group cursor-pointer">
-                <svg
-                  className="mb-3 fill-violet-500"
-                  xmlns="http://www.w3.org/2000/svg"
-                  width={24}
-                  height={24}
-                  viewBox="0 0 24 24"
-                >
-                  <path d="M12 1.5c-1.5 0-3 .5-4.2 1.4-1.2.9-2 2.3-2.3 3.9-.3 1.5 0 3.1.9 4.3.9 1.2 2.3 2 3.8 2.2v1.5h3v-1.5c1.5-.2 2.8-1 3.7-2.2.9-1.2 1.2-2.8.9-4.3-.3-1.6-1.1-3-2.3-3.9C15 2 13.5 1.5 12 1.5zm-1.5 6c-.8 0-1.5-.7-1.5-1.5s.7-1.5 1.5-1.5 1.5.7 1.5 1.5-.7 1.5-1.5 1.5zm3 0c-.8 0-1.5-.7-1.5-1.5s.7-1.5 1.5-1.5 1.5.7 1.5 1.5-.7 1.5-1.5 1.5zM9 15c-1.1 0-2 .9-2 2v3h2v-3h6v3h2v-3c0-1.1-.9-2-2-2H9z"/>
-                </svg>
-                <h3 className="relative inline-block mb-1 font-nacelle text-[1rem] font-semibold text-gray-200">
-                  <span className="relative">
-                    <span className="absolute bottom-0 left-0 h-0.5 w-full bg-violet-500 transform origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-300"></span>
-                    Org AI
-                  </span>
-                </h3>
-                <p className="text-violet-200/65 group-hover:text-violet-200 transition-colors duration-300">
-                  Ask anything about your company, employees, and projects. Get quick, comprehensive responses with our AI assistant.
-                </p>
-              </article>
+
+            <PreloadTrigger videoSrc="/optimized/giferp.webm" onClick={() => setIsERPModalOpen(true)} className="relative">
+              <motion.article className="group/card relative overflow-hidden rounded-2xl bg-gray-800 p-px before:pointer-events-none before:absolute before:-left-40 before:-top-40 before:z-10 before:h-80 before:w-80 before:translate-x-[var(--mouse-x)] before:translate-y-[var(--mouse-y)] before:rounded-full before:bg-violet-500/80 before:opacity-0 before:blur-3xl before:transition-opacity before:duration-500 after:pointer-events-none after:absolute after:-left-48 after:-top-48 after:z-30 after:h-64 after:w-64 after:translate-x-[var(--mouse-x)] after:translate-y-[var(--mouse-y)] after:rounded-full after:bg-violet-500 after:opacity-0 after:blur-3xl after:transition-opacity after:duration-500 hover:after:opacity-20 group-hover:before:opacity-100 cursor-pointer w-[294px] md:w-[352px] h-[189px] md:h-[210px] shrink-0">
+                <div className="relative z-20 h-full overflow-hidden rounded-[inherit] bg-gray-950 after:absolute after:inset-0 after:bg-linear-to-br after:from-gray-900/50 after:via-gray-800/25 after:to-gray-900/50">
+                  <div className="p-5 pt-6 pb-6 flex flex-col gap-1.5">
+                  <div className="mb-2 flex items-center justify-between">
+                    <span className="btn-sm relative rounded-full bg-gray-800/40 px-2.5 py-0.5 text-xs font-normal before:pointer-events-none before:absolute before:inset-0 before:rounded-[inherit] before:border before:border-transparent before:[background:linear-gradient(to_bottom,--theme(--color-gray-700/.15),--theme(--color-gray-700/.5))_border-box] before:[mask-composite:exclude_!important] before:[mask:linear-gradient(white_0_0)_padding-box,_linear-gradient(white_0_0)] hover:bg-gray-800/60">
+                      <span className="bg-linear-to-r from-violet-500 to-violet-200 bg-clip-text text-transparent">
+                        ERP Integrations
+                      </span>
+                    </span>
+                    <div className="shrink-0 text-violet-200/80"><RingsGlyph /></div>
+                  </div>
+                  <p className="text-xs md:text-sm text-violet-200/70 group-hover:text-violet-100/90 transition-colors">
+                  Connect your SAP, Microsoft Dynamics, PeopleSoft, or any other system via CSV. Seamless data integration for your existing workflows.                  </p>
+                  <div className="mt-auto pb-1 flex items-center justify-end">
+                    <div className="absolute right-3 bottom-3 z-50 grid h-9 w-9 place-items-center rounded-full bg-white/5 ring-1 ring-white/10 group-hover:bg-white/10 transition">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 20 20" fill="none">
+                        <path d="M10 4v12M4 10h12" stroke="#E5E7EB" strokeWidth="2" strokeLinecap="round"/>
+                      </svg>
+                    </div>
+                  </div>
+                  </div>
+                </div>
+              </motion.article>
             </PreloadTrigger>
-            <PreloadTrigger
-              videoSrc="/optimized/giffeedback.webm"
-              onClick={() => setIsPerfEvalModalOpen(true)}
-              className="relative"
-            >
-              <article className="group cursor-pointer">
-                <svg
-                  className="mb-3 fill-violet-500"
-                  xmlns="http://www.w3.org/2000/svg"
-                  width={24}
-                  height={24}
-                  viewBox="0 0 24 24"
-                >
-                  <path d="M12 2L15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27l6.91-1.01L12 2z"/>
-                </svg>
-                <h3 className="relative inline-block mb-1 font-nacelle text-[1rem] font-semibold text-gray-200">
-                  <span className="relative">
-                    <span className="absolute bottom-0 left-0 h-0.5 w-full bg-violet-500 transform origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-300"></span>
-                    Performance Evaluation
-                  </span>
-                </h3>
-                <p className="text-violet-200/65 group-hover:text-violet-200 transition-colors duration-300">
-                  World's first fair, bias-adjusted, no-negative-connotations-ever feedback evaluation system using our proprietary algorithms. Focus on growth, not just ratings.
-                </p>
-              </article>
+
+            <PreloadTrigger videoSrc="/optimized/GIFORGAI.webm" onClick={() => setIsOrgAIModalOpen(true)} className="relative">
+              <motion.article className="group/card relative overflow-hidden rounded-2xl bg-gray-800 p-px before:pointer-events-none before:absolute before:-left-40 before:-top-40 before:z-10 before:h-80 before:w-80 before:translate-x-[var(--mouse-x)] before:translate-y-[var(--mouse-y)] before:rounded-full before:bg-violet-500/80 before:opacity-0 before:blur-3xl before:transition-opacity before:duration-500 after:pointer-events-none after:absolute after:-left-48 after:-top-48 after:z-30 after:h-64 after:w-64 after:translate-x-[var(--mouse-x)] after:translate-y-[var(--mouse-y)] after:rounded-full after:bg-violet-500 after:opacity-0 after:blur-3xl after:transition-opacity after:duration-500 hover:after:opacity-20 group-hover:before:opacity-100 cursor-pointer w-[294px] md:w-[352px] h-[189px] md:h-[210px] shrink-0">
+                <div className="relative z-20 h-full overflow-hidden rounded-[inherit] bg-gray-950 after:absolute after:inset-0 after:bg-linear-to-br after:from-gray-900/50 after:via-gray-800/25 after:to-gray-900/50">
+                  <div className="p-5 pt-6 pb-6 flex flex-col gap-1.5">
+                  <div className="mb-2 flex items-center justify-between">
+                    <span className="btn-sm relative rounded-full bg-gray-800/40 px-2.5 py-0.5 text-xs font-normal before:pointer-events-none before:absolute before:inset-0 before:rounded-[inherit] before:border before:border-transparent before:[background:linear-gradient(to_bottom,--theme(--color-gray-700/.15),--theme(--color-gray-700/.5))_border-box] before:[mask-composite:exclude_!important] before:[mask:linear-gradient(white_0_0)_padding-box,_linear-gradient(white_0_0)] hover:bg-gray-800/60">
+                      <span className="bg-linear-to-r from-violet-500 to-violet-200 bg-clip-text text-transparent">
+                        Org AI
+                      </span>
+                    </span>
+                    <div className="shrink-0 text-violet-200/80"><NodesGlyph /></div>
+                  </div>
+                  <p className="text-xs md:text-sm text-violet-200/70 group-hover:text-violet-100/90 transition-colors">
+                  Ask anything about your company, employees, and projects. Get quick, comprehensive responses with our AI assistant.                  </p>
+                  <div className="mt-auto pb-1 flex items-center justify-end">
+                    <div className="absolute right-3 bottom-3 z-50 grid h-9 w-9 place-items-center rounded-full bg-white/5 ring-1 ring-white/10 group-hover:bg-white/10 transition">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 20 20" fill="none">
+                        <path d="M10 4v12M4 10h12" stroke="#E5E7EB" strokeWidth="2" strokeLinecap="round"/>
+                      </svg>
+                    </div>
+                  </div>
+                  </div>
+                </div>
+              </motion.article>
             </PreloadTrigger>
-            <PreloadTrigger
-              videoSrc="/optimized/giferp.webm"
-              onClick={() => setIsERPModalOpen(true)}
-              className="relative"
-            >
-              <article className="group cursor-pointer">
-                <svg
-                  className="mb-3 fill-violet-500"
-                  xmlns="http://www.w3.org/2000/svg"
-                  width={24}
-                  height={24}
-                >
-                  <path
-                    fillOpacity=".48"
-                    d="M12 8.8a3 3 0 1 0 0 6 3 3 0 0 0 0-6Zm-5 3a5 5 0 1 1 10 0 5 5 0 0 1-10 0Z"
-                  />
-                  <path d="m7.454 2.891.891-.454L7.437.655l-.891.454a12 12 0 0 0 0 21.382l.89.454.91-1.781-.892-.455a10 10 0 0 1 0-17.818ZM17.456 1.11l-.891-.454-.909 1.782.891.454a10 10 0 0 1 0 17.819l-.89.454.908 1.781.89-.454a12 12 0 0 0 0-21.382Z" />
-                </svg>
-                <h3 className="relative inline-block mb-1 font-nacelle text-[1rem] font-semibold text-gray-200">
-                  <span className="relative">
-                    <span className="absolute bottom-0 left-0 h-0.5 w-full bg-violet-500 transform origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-300"></span>
-                    ERP Integrations
-                  </span>
-                </h3>
-                <p className="text-violet-200/65 group-hover:text-violet-200 transition-colors duration-300">
-                  Connect your SAP, Microsoft Dynamics, PeopleSoft, or any other system via CSV. Seamless data integration for your existing workflows.
-                </p>
-              </article>
+
+            <PreloadTrigger videoSrc="/optimized/gifreport.webm" onClick={() => setIsReportModalOpen(true)} className="relative">
+              <motion.article className="group/card relative overflow-hidden rounded-2xl bg-gray-800 p-px before:pointer-events-none before:absolute before:-left-40 before:-top-40 before:z-10 before:h-80 before:w-80 before:translate-x-[var(--mouse-x)] before:translate-y-[var(--mouse-y)] before:rounded-full before:bg-violet-500/80 before:opacity-0 before:blur-3xl before:transition-opacity before:duration-500 after:pointer-events-none after:absolute after:-left-48 after:-top-48 after:z-30 after:h-64 after:w-64 after:translate-x-[var(--mouse-x)] after:translate-y-[var(--mouse-y)] after:rounded-full after:bg-violet-500 after:opacity-0 after:blur-3xl after:transition-opacity after:duration-500 hover:after:opacity-20 group-hover:before:opacity-100 cursor-pointer w-[294px] md:w-[352px] h-[189px] md:h-[210px] shrink-0">
+                <div className="relative z-20 h-full overflow-hidden rounded-[inherit] bg-gray-950 after:absolute after:inset-0 after:bg-linear-to-br after:from-gray-900/50 after:via-gray-800/25 after:to-gray-900/50">
+                  <div className="p-5 pt-6 pb-6 flex flex-col gap-1.5">
+                  <div className="mb-2 flex items-center justify-between">
+                    <span className="btn-sm relative rounded-full bg-gray-800/40 px-2.5 py-0.5 text-xs font-normal before:pointer-events-none before:absolute before:inset-0 before:rounded-[inherit] before:border before:border-transparent before:[background:linear-gradient(to_bottom,--theme(--color-gray-700/.15),--theme(--color-gray-700/.5))_border-box] before:[mask-composite:exclude_!important] before:[mask:linear-gradient(white_0_0)_padding-box,_linear-gradient(white_0_0)] hover:bg-gray-800/60">
+                      <span className="bg-linear-to-r from-violet-500 to-violet-200 bg-clip-text text-transparent">
+                        Report Generation
+                      </span>
+                    </span>
+                    <div className="shrink-0 text-violet-200/80"><PieGlyph /></div>
+                  </div>
+                  <p className="text-xs md:text-sm text-violet-200/70 group-hover:text-violet-100/90 transition-colors">
+                  Create, schedule, and export detailed reports with custom visuals. Use AI to generate insights and track changes with version control.                  </p>
+                  <div className="mt-auto pb-1 flex items-center justify-end">
+                    <div className="absolute right-3 bottom-3 z-50 grid h-9 w-9 place-items-center rounded-full bg-white/5 ring-1 ring-white/10 group-hover:bg-white/10 transition">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 20 20" fill="none">
+                        <path d="M10 4v12M4 10h12" stroke="#E5E7EB" strokeWidth="2" strokeLinecap="round"/>
+                      </svg>
+                    </div>
+                  </div>
+                  </div>
+                </div>
+              </motion.article>
             </PreloadTrigger>
-            <PreloadTrigger
-              videoSrc="/optimized/goals.webm"
-              onClick={() => setIsObjectiveModalOpen(true)}
-              className="relative"
-            >
-              <article className="group cursor-pointer">
-                <svg
-                  className="mb-3 fill-violet-500"
-                  xmlns="http://www.w3.org/2000/svg"
-                  width={24}
-                  height={24}
-                  viewBox="0 0 24 24"
-                >
-                  <path d="M12 2a10 10 0 1 0 10 10h-2A8 8 0 1 1 12 4V2Z" />
-                  <path fillOpacity="0.48" d="M12 6a6 6 0 1 0 6 6h-2a4 4 0 1 1-4-4V6Z"/>
-                  <path d="M12 10a2 2 0 1 0 2 2h6v-2h-6a2 2 0 0 0-2-2Z" />
-                </svg>
-                <h3 className="relative inline-block mb-1 font-nacelle text-[1rem] font-semibold text-gray-200">
-                  <span className="relative">
-                    <span className="absolute bottom-0 left-0 h-0.5 w-full bg-violet-500 transform origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-300"></span>
-                    Objective Mapping
-                  </span>
-                </h3>
-                <p className="text-violet-200/65 group-hover:text-violet-200 transition-colors duration-300">
-                  See strategy-to-execution in one view. Know what projects drive each objective, who’s on the front lines, and who the silent heroes are—down to KPIs and timelines.
-                </p>
-              </article>
+
+            <PreloadTrigger videoSrc="/optimized/gifusermanagement.webm" onClick={() => setIsUserModalOpen(true)} className="relative">
+              <motion.article className="group/card relative overflow-hidden rounded-2xl bg-gray-800 p-px before:pointer-events-none before:absolute before:-left-40 before:-top-40 before:z-10 before:h-80 before:w-80 before:translate-x-[var(--mouse-x)] before:translate-y-[var(--mouse-y)] before:rounded-full before:bg-violet-500/80 before:opacity-0 before:blur-3xl before:transition-opacity before:duration-500 after:pointer-events-none after:absolute after:-left-48 after:-top-48 after:z-30 after:h-64 after:w-64 after:translate-x-[var(--mouse-x)] after:translate-y-[var(--mouse-y)] after:rounded-full after:bg-violet-500 after:opacity-0 after:blur-3xl after:transition-opacity after:duration-500 hover:after:opacity-20 group-hover:before:opacity-100 cursor-pointer w-[294px] md:w-[352px] h-[189px] md:h-[210px] shrink-0">
+                <div className="relative z-20 h-full overflow-hidden rounded-[inherit] bg-gray-950 after:absolute after:inset-0 after:bg-linear-to-br after:from-gray-900/50 after:via-gray-800/25 after:to-gray-900/50">
+                  <div className="p-5 pt-6 pb-6 flex flex-col gap-1.5">
+                  <div className="mb-2 flex items-center justify-between">
+                    <span className="btn-sm relative rounded-full bg-gray-800/40 px-2.5 py-0.5 text-xs font-normal before:pointer-events-none before:absolute before:inset-0 before:rounded-[inherit] before:border before:border-transparent before:[background:linear-gradient(to_bottom,--theme(--color-gray-700/.15),--theme(--color-gray-700/.5))_border-box] before:[mask-composite:exclude_!important] before:[mask:linear-gradient(white_0_0)_padding-box,_linear-gradient(white_0_0)] hover:bg-gray-800/60">
+                      <span className="bg-linear-to-r from-violet-500 to-violet-200 bg-clip-text text-transparent">
+                        User Management
+                      </span>
+                    </span>
+                    <div className="shrink-0 text-violet-200/80"><UsersGlyph /></div>
+                  </div>
+                  <p className="text-xs md:text-sm text-violet-200/70 group-hover:text-violet-100/90 transition-colors">
+                  Manage users you let into the app. MFA and admin approval needed for access. Edit roles, delete records, and search employees with ease.                  </p>
+                  <div className="mt-auto pb-1 flex items-center justify-end">
+                    <div className="absolute right-3 bottom-3 z-50 grid h-9 w-9 place-items-center rounded-full bg-white/5 ring-1 ring-white/10 group-hover:bg-white/10 transition">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 20 20" fill="none">
+                        <path d="M10 4v12M4 10h12" stroke="#E5E7EB" strokeWidth="2" strokeLinecap="round"/>
+                      </svg>
+                    </div>
+                  </div>
+                  </div>
+                </div>
+              </motion.article>
             </PreloadTrigger>
+            </div>
+          </div>
+          </Spotlight>
+          <div className="mt-6 flex w-full items-center justify-center gap-3">
+            <button onClick={() => scrollRow(-1)} className="h-10 w-10 rounded-full bg-white/5 ring-1 ring-white/10 hover:bg-white/10 transition">←</button>
+            <button onClick={() => scrollRow(1)} className="h-10 w-10 rounded-full bg-white/5 ring-1 ring-white/10 hover:bg-white/10 transition">→</button>
           </div>
         </div>
       </div>
